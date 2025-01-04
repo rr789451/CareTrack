@@ -117,9 +117,6 @@ const RegisterForm = ({ user } : {user: User}) => {
                 control={form.control}
                 name="birthDate"
                 label="Date of Birth"
-                placeholder="johndoe@email.com"
-                iconSrc="/assets/icons/email.svg"
-                iconAlt="email"
             />
 
             <CustomFormField 
@@ -236,7 +233,7 @@ const RegisterForm = ({ user } : {user: User}) => {
                 control={form.control}
                 name="allergies"
                 label="Allergies (if any)"
-                placeholder="Peanuts, Pollen, etc."
+                placeholder="ex: Peanuts, Pollen, etc."
             />
 
             <CustomFormField 
@@ -244,7 +241,7 @@ const RegisterForm = ({ user } : {user: User}) => {
                 control={form.control}
                 name="currentMedication"
                 label="Current Medication (if any)"
-                placeholder="Paracetamol 500mg, Nascom 200mg"
+                placeholder="ex: Paracetamol 500mg, Nascom 200mg"
             />
         </div>
 
@@ -254,7 +251,7 @@ const RegisterForm = ({ user } : {user: User}) => {
                 control={form.control}
                 name="familyMedicalHistory"
                 label="Family Medical History"
-                placeholder="Mother had BP, Father had diabetes"
+                placeholder="ex: Mother had BP, Father had diabetes"
             />
 
             <CustomFormField 
@@ -262,7 +259,7 @@ const RegisterForm = ({ user } : {user: User}) => {
                 control={form.control}
                 name="pastMedicalHistory"
                 label="Past Medical History"
-                placeholder="Appendectomy, Tonsillectomy"
+                placeholder="ex: Appendectomy, Tonsillectomy"
             />
         </div>
 
