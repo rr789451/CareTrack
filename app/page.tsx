@@ -2,6 +2,8 @@ import PatientForm from "@/components/forms/PatientForm";
 import PasskeyModal from "@/components/PasskeyModal";
 import Image from "next/image";
 import Link from "next/link";
+import { SpeedInsights } from "@vercel/speed-insights/next"
+import { Analytics } from "@vercel/analytics/react"
 
 export default function Home({ searchParams }: SearchParamProps) {
 
@@ -9,7 +11,8 @@ export default function Home({ searchParams }: SearchParamProps) {
 
   return (
     <div className="flex h-screen max-h-screen">
-
+      <SpeedInsights />
+      <Analytics />
       {isAdmin && <PasskeyModal />}
 
       <section className="remove-scrollbar container">

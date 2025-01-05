@@ -20,6 +20,8 @@
     "@radix-ui/react-slot": "^1.1.1",
     "@sentry/nextjs": "^8.47.0",
     "@tanstack/react-table": "^8.20.6",
+    "@vercel/analytics": "^1.4.1",
+    "@vercel/speed-insights": "^1.1.0",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "input-otp": "^1.4.1",
