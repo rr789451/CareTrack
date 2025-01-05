@@ -15,6 +15,9 @@ export const createAppointment = async (appointment: CreateAppointmentParams) =>
             appointment
         )
 
+        revalidatePath('/admin');
+        revalidatePath('/'); 
+
         return parseStringify(newAppointment);
     } catch (error) {
         console.log(error)
@@ -28,6 +31,9 @@ export const getAppointment = async (appointmentId: string) => {
             APPOINTMENT_COLLECTION_ID!,
             appointmentId,
         )
+
+        revalidatePath('/admin');
+        revalidatePath('/'); 
 
         return parseStringify(appointment);
     } catch (error) {
@@ -70,6 +76,9 @@ export const getRecentAppointmentList = async () => {
             ...counts,
             documents: appointments.documents
         }
+
+        revalidatePath('/admin');
+        revalidatePath('/'); 
 
         return parseStringify(data);
     } catch (error) {
