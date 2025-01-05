@@ -4,7 +4,7 @@ import { ID, Query } from "node-appwrite";
 import { APPOINTMENT_COLLECTION_ID, DATABASE_ID, databases, messaging } from "../appwrite.config";
 import { formatDateTime, parseStringify } from "../utils";
 import { Appointment } from "@/types/appwrite.types";
-import { revalidatePath } from "next/cache";
+import { revalidatePath, unstable_noStore } from "next/cache";
 
 export const createAppointment = async (appointment: CreateAppointmentParams) => {
     try {
@@ -14,9 +14,6 @@ export const createAppointment = async (appointment: CreateAppointmentParams) =>
             ID.unique(),
             appointment
         )
-
-        revalidatePath('/admin');
-        revalidatePath('/'); 
 
         return parseStringify(newAppointment);
     } catch (error) {
@@ -32,9 +29,6 @@ export const getAppointment = async (appointmentId: string) => {
             appointmentId,
         )
 
-        revalidatePath('/admin');
-        revalidatePath('/'); 
-
         return parseStringify(appointment);
     } catch (error) {
         console.log(error)
@@ -42,6 +36,7 @@ export const getAppointment = async (appointmentId: string) => {
 }
 
 export const getRecentAppointmentList = async () => {
+    unstable_noStore();
     try {
         const appointments = await databases.listDocuments(
             DATABASE_ID!,
@@ -76,9 +71,6 @@ export const getRecentAppointmentList = async () => {
             ...counts,
             documents: appointments.documents
         }
-
-        revalidatePath('/admin');
-        revalidatePath('/'); 
 
         return parseStringify(data);
     } catch (error) {
