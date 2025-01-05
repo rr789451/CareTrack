@@ -206,6 +206,20 @@ For support, please:
 - Open an issue in the GitHub repository
 - Contact the me
 
+## 🔮 Upcoming Features
+
+I'm constantly working to improve the healthcare appointment system. Here's what's coming in the next versions:
+
+### Version 2.0
+- **Appointment History**
+  - Comprehensive view of past appointments
+- **Smart Scheduling**
+  - Automatic conflict detection during booking
+  - Real-time availability updates
+- **Enhanced Patient Control**
+  - Self-service appointment cancellation
+  - Rescheduling capabilities
+
 ## ✨ Acknowledgments
 
 Built with the following amazing technologies:
