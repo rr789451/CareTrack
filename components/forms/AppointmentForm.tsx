@@ -7,15 +7,16 @@ import { z } from "zod"
 import { Form } from "@/components/ui/form"
 import CustomFormField from "../CustomFormField"
 import SubmitButton from "../SubmitButton"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { getAppointmentSchema } from "@/lib/validation"
 import { useRouter } from "next/navigation"
 import { FormFieldType } from "./PatientForm"
 import { SelectItem } from "../ui/select"
-import { Doctors } from "@/constants"
 import Image from "next/image"
 import { createAppointment, updateAppointment } from "@/lib/actions/appointment.actions"
-import { Appointment } from "@/types/appwrite.types"
+import { Appointment, Doctor } from "@/types/appwrite.types"
+import { getRecentDoctorList } from "@/lib/actions/doctor.actions"
+import { DoctorStatusBadge } from "../DoctorStatusBadge"
 
 const AppointmentForm = ({
     userId,
@@ -32,20 +33,38 @@ const AppointmentForm = ({
 } ) => {
 
   const [isLoading, setIsLoading] = useState(false);
+  const [doctors, setDoctors] = useState<Doctor[]>([]);
+  const [isFetchingDoctors, setIsFetchingDoctors] = useState(false);
   const router = useRouter();
 
   const AppointmentFormValidation = getAppointmentSchema(type);
-
+  
   const form = useForm<z.infer<typeof AppointmentFormValidation>>({
     resolver: zodResolver(AppointmentFormValidation),
     defaultValues: {
-      primaryPhysician: appointment ? appointment.primaryPhysician : '',
+      primaryPhysician: appointment ? appointment.doctor.$id : '',
       schedule: appointment ? new Date(appointment?.schedule) : new Date(Date.now()),
       reason: appointment ? appointment.reason : '',
       note: appointment?.note || '',
       cancellationReason: appointment?.cancellationReason || '',
     },
   })
+
+  useEffect(() => {
+    const fetchDoctors = async () => {
+      setIsFetchingDoctors(true);
+      try {
+        const fetchedDoctors = await getRecentDoctorList();
+        setDoctors(fetchedDoctors.documents || []);
+      } catch (error) {
+        console.error("Error fetching doctors:", error);
+      } finally {
+        setIsFetchingDoctors(false);
+      }
+    };
+  
+    fetchDoctors();
+  }, []);
 
   async function onSubmit(values: z.infer<typeof AppointmentFormValidation>) {
     setIsLoading(true);
@@ -70,7 +89,7 @@ const AppointmentForm = ({
             const appointmentData = {
                 userId,
                 patient: patientId,
-                primaryPhysician: values.primaryPhysician,
+                doctor: values.primaryPhysician,
                 schedule: new Date(values.schedule),
                 reason: values.reason!,
                 note: values.note,
@@ -88,7 +107,7 @@ const AppointmentForm = ({
                 userId,
                 appointmentId: appointment?.$id!,
                 appointment:{
-                    primaryPhysician: values?.primaryPhysician,
+                    doctor: values.primaryPhysician,
                     schedule: new Date(values?.schedule),
                     status: status as Status,
                     cancellationReason: values?.cancellationReason,
@@ -145,20 +164,20 @@ const AppointmentForm = ({
                     label="Doctor"
                     placeholder="Select a Doctor"
                 >
-                    {Doctors.map((doctor) => (
+                    {doctors.map((doctor) => (
                         <SelectItem 
-                            key={doctor.name} 
-                            value={doctor.name}
+                            key={doctor.$id} 
+                            value={doctor.$id}
                         >
                             <div className="flex cursor-pointer items-center gap-2">
                                 <Image 
-                                    src={doctor.image}
+                                    src={doctor.imageUrl}
                                     width={32}
                                     height={32}
                                     alt={doctor.name}
                                     className="rounded-full border border-dark-500"
                                 />
-                                <p>{doctor.name}</p>
+                                <p>{doctor.name}</p> <DoctorStatusBadge status={doctor.status} />
                             </div>
                         </SelectItem>
                     ))}

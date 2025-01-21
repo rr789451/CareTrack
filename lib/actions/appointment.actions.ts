@@ -3,8 +3,9 @@
 import { ID, Query } from "node-appwrite";
 import { APPOINTMENT_COLLECTION_ID, DATABASE_ID, databases, messaging } from "../appwrite.config";
 import { formatDateTime, parseStringify } from "../utils";
-import { Appointment } from "@/types/appwrite.types";
+import { Appointment, Doctor } from "@/types/appwrite.types";
 import { revalidatePath, unstable_noStore } from "next/cache";
+import { getRecentDoctorList } from "./doctor.actions";
 
 export const createAppointment = async (appointment: CreateAppointmentParams) => {
     try {
@@ -91,14 +92,17 @@ export const updateAppointment = async ({ appointmentId, userId, appointment, ty
             throw new Error('Appointment not found');
         }
 
+        
+          const Doctors = await getRecentDoctorList();
+          const doctor = Doctors.documents.find((doc:Doctor) => doc.$id === appointment.doctor)
+
         const smsMessage = `
             Hi, it's CarePulse.
             ${type === 'schedule' 
-                ? `Your appointment has been scheduled for ${formatDateTime(appointment.schedule!).dateTime} with Dr. ${appointment.primaryPhysician}` :
+                ? `Your appointment has been scheduled for ${formatDateTime(appointment.schedule!).dateTime} with Dr. ${doctor.name}` :
                 `We regret to inform you that your appointment has been cancelled for the following reason: ${appointment.cancellationReason}`
             }.
         `;
-
         await sendSMSNotification(userId, smsMessage);
 
         revalidatePath('/admin');

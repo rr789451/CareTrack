@@ -17,7 +17,6 @@ export const registerDoctor = async ({image, ...doctor}: RegisterDoctorParams) =
             )
             
             file = await storage.createFile(BUCKET_ID!, ID.unique(), inputFile)
-            console.log(file);
         }
 
         const newDoctor = await databases.createDocument(

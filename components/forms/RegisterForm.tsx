@@ -6,21 +6,24 @@ import { z } from "zod"
 import { Form, FormControl } from "@/components/ui/form"
 import CustomFormField from "../CustomFormField"
 import SubmitButton from "../SubmitButton"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { PatientFormValidation } from "@/lib/validation"
 import { useRouter } from "next/navigation"
 import { FormFieldType } from "./PatientForm"
 import { RadioGroup, RadioGroupItem } from "../ui/radio-group"
-import { Doctors, GenderOptions, IdentificationTypes, PatientFormDefaultValues } from "@/constants"
+import { GenderOptions, IdentificationTypes, PatientFormDefaultValues } from "@/constants"
 import { Label } from "../ui/label"
 import { SelectItem } from "../ui/select"
 import Image from "next/image"
 import FileUploader from "../FileUploader"
 import { registerPatient } from "@/lib/actions/patient.actions"
+import { Doctor } from "@/types/appwrite.types"
+import { getRecentDoctorList } from "@/lib/actions/doctor.actions"
  
 const RegisterForm = ({ user } : {user: User}) => {
 
   const [isLoading, setIsLoading] = useState(false);
+  const [doctors, setDoctors] = useState<Doctor[]>([]);
   const router = useRouter();
 
   const form = useForm<z.infer<typeof PatientFormValidation>>({
@@ -32,6 +35,22 @@ const RegisterForm = ({ user } : {user: User}) => {
       phone: ""
     },
   })
+
+    useEffect(() => {
+    const fetchDoctors = async () => {
+      setIsLoading(true);
+      try {
+        const fetchedDoctors = await getRecentDoctorList();
+        setDoctors(fetchedDoctors.documents || []);
+      } catch (error) {
+        console.error("Error fetching doctors:", error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+  
+    fetchDoctors();
+  }, []);
  
   async function onSubmit(values: z.infer<typeof PatientFormValidation>) {
     setIsLoading(true);
@@ -190,14 +209,14 @@ const RegisterForm = ({ user } : {user: User}) => {
             label="Primary Physician"
             placeholder="Select a physician"
         >
-            {Doctors.map((doctor) => (
+            {doctors.map((doctor) => (
                 <SelectItem 
-                    key={doctor.name} 
-                    value={doctor.name}
+                    key={doctor.$id} 
+                    value={doctor.$id}
                 >
                     <div className="flex cursor-pointer items-center gap-2">
                         <Image 
-                            src={doctor.image}
+                            src={doctor.imageUrl}
                             width={32}
                             height={32}
                             alt={doctor.name}

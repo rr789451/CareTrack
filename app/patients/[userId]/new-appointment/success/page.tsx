@@ -1,8 +1,9 @@
 /* eslint-disable @typescript-eslint/no-non-null-asserted-optional-chain */
 import { Button } from '@/components/ui/button';
-import { Doctors } from '@/constants';
 import { getAppointment } from '@/lib/actions/appointment.actions';
+import { getRecentDoctorList } from '@/lib/actions/doctor.actions';
 import { formatDateTime } from '@/lib/utils';
+import { Doctor } from '@/types/appwrite.types';
 import Image from 'next/image'
 import Link from 'next/link'
 import React from 'react'
@@ -11,9 +12,8 @@ const Success = async ({ params: { userId }, searchParams }: SearchParamProps) =
 
   const appointmentId = (searchParams?.appointmentId as string) || '';
   const appointment = await getAppointment(appointmentId);
-
-  const doctor = Doctors.find((doc) => doc.name === appointment.primaryPhysician)
-
+  const Doctors = await getRecentDoctorList();
+  const doctor = Doctors.documents.find((doc:Doctor) => doc.$id === appointment.doctor.$id)
   return (
     <div className='flex h-screen max-h-screen px-[5%]'>
         <div className='success-img'>
@@ -46,11 +46,11 @@ const Success = async ({ params: { userId }, searchParams }: SearchParamProps) =
                 <p>Requested appointment details:</p>
                 <div className='flex items-center gap-3'>
                     <Image 
-                        src={doctor?.image!}
+                        src={doctor?.imageUrl!}
                         width={100}
                         height={100}
                         alt='doctor'
-                        className='size-6'
+                        className='size-8 rounded-md'
                     />
                     <p className='whitespace-nowrap'>Dr. {doctor?.name}</p>
                 </div>

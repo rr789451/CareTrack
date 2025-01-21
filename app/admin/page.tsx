@@ -4,11 +4,11 @@ import { getRecentAppointmentList } from '@/lib/actions/appointment.actions'
 import Image from 'next/image'
 import Link from 'next/link'
 import React from 'react'
-import {columns, doctorColumns} from '@/components/table/Columns'
+import {doctorColumns} from '@/components/table/Columns'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-//import { Button } from '@/components/ui/button'
 import { getRecentDoctorList } from '@/lib/actions/doctor.actions'
 import DoctorModal from '@/components/DoctorModal'
+import { ClientTable } from '@/components/table/ClientTable'
 
 const Admin = async () => {
 
@@ -67,7 +67,7 @@ const Admin = async () => {
                         />
                     </section>
 
-                    <DataTable columns={columns} data={appointments.documents} />
+                    <ClientTable appointments={appointments.documents} doctors={doctors.documents} />
                 </main>
             </TabsContent>
             <TabsContent value="doctor">
