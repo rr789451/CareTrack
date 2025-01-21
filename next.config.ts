@@ -7,7 +7,16 @@ const nextConfig: NextConfig = {
   },
   eslint: {
     ignoreDuringBuilds: true,
-  }
+  },
+  images: {
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "cloud.appwrite.io",
+        pathname: "/v1/storage/buckets/**",  // Allow images from Appwrite storage buckets
+      },
+    ],
+  },
 };
 
 export default withSentryConfig(nextConfig, {

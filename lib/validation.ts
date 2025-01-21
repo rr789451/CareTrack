@@ -116,3 +116,32 @@ export function getAppointmentSchema(type: string) {
       return ScheduleAppointmentSchema;
   }
 }
+
+export const CreateDoctorSchema = z.object({
+  name: z.string().min(2, "Select at least one doctor"),
+  image: z.custom<File[]>(),
+  status: z.enum(["available", "leave"]),
+});
+
+export const EditDoctorSchema = z.object({
+  name: z.string().min(2, "Select at least one doctor"),
+  image: z.custom<File[]>(),
+  status: z.enum(["available", "leave"]),
+});
+
+export const DeleteDoctorSchema = z.object({
+  name: z.string().min(2, "Select at least one doctor"),
+  image: z.custom<File[]>(),
+  status: z.enum(["available", "leave"]),
+});
+
+export function getDoctorSchema(type: string) {
+  switch (type) {
+    case "create":
+      return CreateDoctorSchema;
+    case "cancel":
+      return DeleteDoctorSchema;
+    default:
+      return EditDoctorSchema;
+  }
+}

@@ -5,9 +5,10 @@ import Link from "next/link";
 import { SpeedInsights } from "@vercel/speed-insights/next"
 import { Analytics } from "@vercel/analytics/react"
 
-export default function Home({ searchParams }: SearchParamProps) {
+export default async function Home({ searchParams }: SearchParamProps) {
 
-  const isAdmin = searchParams.admin === "true";
+  const params = await searchParams;
+  const isAdmin = params?.admin === "true";
 
   return (
     <div className="flex h-screen max-h-screen">

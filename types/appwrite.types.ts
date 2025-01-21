@@ -24,6 +24,13 @@ export interface Patient extends Models.Document {
   privacyConsent: boolean;
 }
 
+export interface Doctor extends Models.Document {
+  doctorId: string;
+  name: string;
+  image: string;
+  status: DoctorStatus;
+}
+
 export interface Appointment extends Models.Document {
   patient: Patient;
   schedule: Date;
