@@ -9,6 +9,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { getRecentDoctorList } from '@/lib/actions/doctor.actions'
 import DoctorModal from '@/components/DoctorModal'
 import { ClientTable } from '@/components/table/ClientTable'
+import { LogoutButton } from '@/components/LogoutButton'
 
 const Admin = async () => {
 
@@ -28,6 +29,7 @@ const Admin = async () => {
                 />
             </Link>
             <p className='text-16-semibold'>Admin Dashboard</p>
+            <LogoutButton />
         </header>
 
         <Tabs defaultValue="appointment">
