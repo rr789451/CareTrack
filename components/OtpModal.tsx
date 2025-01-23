@@ -97,19 +97,19 @@ const OtpModal = ({ data }: { data: { phone: string; userId: string; email: stri
                 </div>
             <AlertDialogFooter>
             <AlertDialogAction 
-                        onClick={(e) => validateOtp(e)} 
-                        className={`shad-primary-btn w-full transition duration-300 ${isLoggingIn ? 'cursor-not-allowed opacity-70' : 'hover:bg-green-500'}`}
-                        disabled={isLoggingIn}
-                    >
-                        {isLoggingIn ? (
-                            <div className="flex justify-center items-center">
-                                <div className="w-5 h-5 border-4 border-white border-t-green-500 rounded-full animate-spin mr-2"></div>
-                                Logging in...
-                            </div>
-                        ) : (
-                            'Continue'
-                        )}
-                    </AlertDialogAction>
+                onClick={(e) => validateOtp(e)} 
+                className={`shad-primary-btn w-full transition duration-300 ${isLoggingIn ? 'cursor-not-allowed opacity-70' : 'hover:bg-green-500'}`}
+                disabled={isLoggingIn}
+            >
+                {isLoggingIn ? (
+                    <div className="flex justify-center items-center">
+                        <div className="w-5 h-5 border-4 border-white border-t-green-500 rounded-full animate-spin mr-2"></div>
+                        Logging in...
+                    </div>
+                ) : (
+                    'Continue'
+                )}
+            </AlertDialogAction>
             </AlertDialogFooter>
         </AlertDialogContent>
     </AlertDialog>

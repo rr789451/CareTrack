@@ -28,6 +28,7 @@ const PasskeyModal = () => {
   const [open, setOpen] = useState(false);
   const [passkey, setPasskey] = useState('');
   const [error, setError] = useState('');
+  const [isLoggingIn, setIsLoggingIn] = useState(false);
 
   const encryptedKey = typeof window !== 'undefined' ? window.localStorage.getItem('accessKey') : null;
 
@@ -47,6 +48,7 @@ const PasskeyModal = () => {
 
   const validatePasskey = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     e.preventDefault();
+    setIsLoggingIn(true);
 
     if(passkey === process.env.NEXT_PUBLIC_ADMIN_PASSKEY) {
         const encryptedKey = encryptKey(passkey);
@@ -56,6 +58,7 @@ const PasskeyModal = () => {
         setOpen(false);
     } else {
         setError('Invalid passkey. Please try again.');
+        setIsLoggingIn(false);
     }
   }
 
@@ -98,7 +101,20 @@ const PasskeyModal = () => {
                     {error && <p className='shad-error text-14-regular mt-4 flex justify-center'>{error}</p>}
                 </div>
             <AlertDialogFooter>
-            <AlertDialogAction onClick={(e) => validatePasskey(e)} className='shad-primary-btn w-full'>Continue</AlertDialogAction>
+            <AlertDialogAction 
+                onClick={(e) => validatePasskey(e)} 
+                className={`shad-primary-btn w-full transition duration-300 ${isLoggingIn ? 'cursor-not-allowed opacity-70' : 'hover:bg-green-500'}`}
+                disabled={isLoggingIn}
+            >
+                {isLoggingIn ? (
+                    <div className="flex justify-center items-center">
+                        <div className="w-5 h-5 border-4 border-white border-t-green-500 rounded-full animate-spin mr-2"></div>
+                        Logging in...
+                    </div>
+                ) : (
+                    'Continue'
+                )}
+            </AlertDialogAction>
             </AlertDialogFooter>
         </AlertDialogContent>
     </AlertDialog>
