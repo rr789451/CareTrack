@@ -8,6 +8,7 @@ A modern, full-stack appointment management solution for healthcare services bui
 
 - **Patient Portal**
   - Secure authentication and registration
+  - Comprehensive appointment management
   - Multi-step form completion for personal and medical information
   - Intuitive appointment booking interface
   - Real-time booking confirmation
@@ -15,6 +16,7 @@ A modern, full-stack appointment management solution for healthcare services bui
 
 - **Admin Dashboard**
   - Comprehensive appointment management
+  - Comprehensive doctor management
   - Dynamic scheduling interface
   - Automated SMS notifications for schedule changes
   - Real-time updates using TanStack Table
@@ -87,7 +89,7 @@ npm run dev
 The application uses Appwrite for authentication. Ensure you have set up the following:
 
 - Create an Appwrite project
-- Configure authentication methods (email/password, social providers)
+- Configure authentication methods (OTP Authentication)
 - Set up the necessary collections in Appwrite Console
 - Update the environment variables with your Appwrite credentials
 
@@ -138,12 +140,32 @@ interface Patient {
 interface Appointment {
   userId: string;
   patientId: string;
-  primaryPhysician: string;
+  doctor: string;
   schedule: dateTime;
   reason: string;
   note: string;
   status: enum;
   cancellationReason: string;
+  completionReason: string;
+}
+```
+
+### Doctor Collection
+```typescript
+interface Doctor {
+  name: string;
+  imageUrl: string;
+  status: enum;
+  imageId: string;
+}
+```
+
+### Otp Collection
+```typescript
+interface Doctor {
+  email: string;
+  otpCode: string;
+  expiresAt: dateTime;
 }
 ```
 
@@ -158,6 +180,7 @@ interface Appointment {
 ### Administrators
 - Access admin dashboard
 - Manage all appointments
+- Manage all doctors
 - Schedule and cancel appointments
 - Send notifications to patients
 
@@ -173,11 +196,8 @@ The application is configured for deployment on Vercel:
 
 - Connect your GitHub repository to Vercel
 - Configure environment variables in Vercel dashboard
-- Deploy using the Vercel CLI or Vercel Dashboard:
+- Deploy using the Vercel Dashboard:
 
-```bash
-vercel
-```
 
 ## 🤝 Contributing
 
@@ -204,21 +224,7 @@ This project is licensed under the MIT License.
 
 For support, please:
 - Open an issue in the GitHub repository
-- Contact the me
-
-## 🔮 Upcoming Features
-
-I'm constantly working to improve the healthcare appointment system. Here's what's coming in the next versions:
-
-### Version 2.0
-- **Appointment History**
-  - Comprehensive view of past appointments
-- **Smart Scheduling**
-  - Automatic conflict detection during booking
-  - Real-time availability updates
-- **Enhanced Patient Control**
-  - Self-service appointment cancellation
-  - Rescheduling capabilities
+- Contact me at [Rohit](mailto:rr789451@gmail.com?subject=[GitHub]%20Appointment%20Scheduler%20Support)
 
 ## ✨ Acknowledgments
 
