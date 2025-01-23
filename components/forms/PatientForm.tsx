@@ -50,7 +50,7 @@ const PatientForm = () => {
       setIsModalOpen(true);
     }, 100);
   };
- // const response = await users.updateEmailVerification(userId, true);
+ 
   async function onSubmit(values: z.infer<typeof UserFormValidation>) {
     setIsLoading(true);
     try {

@@ -46,12 +46,18 @@ const Admin = async () => {
 
                     <section className='admin-stat'>
                         <StatCard 
+                            type='completed'
+                            count={appointments.completeCount}
+                            label='Completed Appointments'
+                            icon='/assets/icons/check.svg'
+                        />
+
+                        <StatCard 
                             type='appointments'
                             count={appointments.scheduledCount}
                             label='Scheduled Appointments'
                             icon='/assets/icons/appointments.svg'
                         />
-
                         
                         <StatCard 
                             type='pending'
@@ -59,7 +65,6 @@ const Admin = async () => {
                             label='Pending Appointments'
                             icon='/assets/icons/pending.svg'
                         />
-
                         
                         <StatCard 
                             type='cancelled'
@@ -77,9 +82,6 @@ const Admin = async () => {
                     <section className='w-full space-y-4'>
                         <h1 className='header'>Welcome 👋</h1>
                         <p className='text-dark-700'>Time to play doctor! Edit or delete their info with a flick of your wand.</p>
-                        {/* <Button className='bg-green-500 text-white max-w-[400px] py-4 px-12 rounded-md hover:bg-green-500'>
-                            Add Doctor
-                        </Button> */}
                         <DoctorModal type="create" />
                     </section>
 

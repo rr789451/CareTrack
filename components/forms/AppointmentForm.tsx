@@ -27,7 +27,7 @@ const AppointmentForm = ({
 }:{
     userId: string;
     patientId: string;
-    type: "create" | "cancel" | "schedule";
+    type: "create" | "cancel" | "schedule" | "edit" | 'complete';
     appointment?: Appointment;
     setOpen: (open: boolean) => void;
 } ) => {
@@ -47,6 +47,7 @@ const AppointmentForm = ({
       reason: appointment ? appointment.reason : '',
       note: appointment?.note || '',
       cancellationReason: appointment?.cancellationReason || '',
+      completionReason: appointment?.completionReason || '',
     },
   })
 
@@ -77,6 +78,14 @@ const AppointmentForm = ({
 
         case "cancel":
             status = 'cancelled';
+            break;
+        
+        case "edit":
+            status = 'pending';
+            break;
+        
+        case "complete":
+            status = 'completed';
             break;
         
         default:
@@ -111,6 +120,7 @@ const AppointmentForm = ({
                     schedule: new Date(values?.schedule),
                     status: status as Status,
                     cancellationReason: values?.cancellationReason,
+                    completionReason: values?.completionReason,
                 },
                 type
             }
@@ -143,6 +153,15 @@ const AppointmentForm = ({
     case "schedule":
         buttonLabel = 'Schedule Appointment';
         break;
+    
+    case "edit":
+        buttonLabel = 'Edit Appointment';
+        break;
+    
+    case "complete":
+        buttonLabel = 'Complete Appointment';
+        break;
+
     default:
         break;
   }
@@ -155,7 +174,7 @@ const AppointmentForm = ({
             <p className="text-dark-700">Request a new appointment in 10 seconds.</p>
         </section>}
 
-        {type !== "cancel" && (
+        {type !== "cancel" && type !== "complete" && (
             <>
                 <CustomFormField 
                     fieldType={FormFieldType.SELECT}
@@ -177,7 +196,7 @@ const AppointmentForm = ({
                                     alt={doctor.name}
                                     className="rounded-full border border-dark-500"
                                 />
-                                <p>{doctor.name}</p> <DoctorStatusBadge status={doctor.status} />
+                                <p>{doctor.name}</p> {type === 'schedule' && <DoctorStatusBadge status={doctor.status} />}
                             </div>
                         </SelectItem>
                     ))}
@@ -220,6 +239,16 @@ const AppointmentForm = ({
                 name="cancellationReason"
                 label="Reason for Cancellation"
                 placeholder="Enter reason for cancellation"
+            />
+        )}
+
+        {type === "complete" && (
+            <CustomFormField 
+                fieldType={FormFieldType.TEXTAREA}
+                control={form.control}
+                name="completionReason"
+                label="Notes from Doctor"
+                placeholder="Enter if there are any notes from doctor"
             />
         )}
 

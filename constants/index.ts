@@ -44,4 +44,5 @@ export const StatusIcon = {
   cancelled: "/assets/icons/cancelled.svg",
   available: "/assets/icons/available.svg",
   leave: "/assets/icons/leave.svg",
+  completed: "/assets/icons/check-circle.svg"
 };

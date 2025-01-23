@@ -8,7 +8,7 @@ import { formatDateTime } from "@/lib/utils"
 import Image from "next/image"
 import AppointmentModal from "../AppointmentModal"
 
-interface ClientTableProps {
+interface PatientTableProps {
   appointments: Appointment[]
   doctors: Doctor[]
 }
@@ -70,11 +70,11 @@ const createColumns = (doctors: Doctor[]): ColumnDef<Appointment>[] => [
         return (
             <div className="flex gap-1">
                 <AppointmentModal 
-                    type="schedule" 
+                    type="edit" 
                     patientId={data.patient.$id}
                     userId={data.userId}
                     appointment={data}
-                    disabled={data.status === 'completed' ? true : false}
+                    disabled={data.status === 'scheduled' || data.status === 'completed' ? true : false}
                 />
                 <AppointmentModal 
                     type="cancel" 
@@ -83,20 +83,13 @@ const createColumns = (doctors: Doctor[]): ColumnDef<Appointment>[] => [
                     appointment={data}
                     disabled={data.status === 'pending' || data.status === 'scheduled' ? false : true}
                 />
-                <AppointmentModal 
-                    type="complete" 
-                    patientId={data.patient.$id}
-                    userId={data.userId}
-                    appointment={data}
-                    disabled={data.status === 'completed' || data.status === 'cancelled' || data.status === 'pending' ? true : false}
-                />
             </div>
         )
     },
   }, 
 ]
 
-export const ClientTable = ({ appointments, doctors }: ClientTableProps) => {
+export const PatientTable = ({ appointments, doctors }: PatientTableProps) => {
   return (
     <DataTable 
       columns={createColumns(doctors)} 

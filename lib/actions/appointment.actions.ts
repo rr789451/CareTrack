@@ -48,7 +48,8 @@ export const getRecentAppointmentList = async () => {
         const initialCounts = {
             scheduledCount: 0,
             pendingCount: 0,
-            cancelledCount: 0
+            cancelledCount: 0,
+            completeCount: 0,
         }
 
         const counts = (appointments.documents as Appointment[]).reduce((acc, appointment) => {
@@ -61,6 +62,56 @@ export const getRecentAppointmentList = async () => {
                     break;
                 case 'cancelled':
                     acc.cancelledCount += 1;
+                    break;
+                case 'completed':
+                    acc.completeCount += 1;
+                    break;
+            }
+
+            return acc;
+        }, initialCounts);
+
+        const data = {
+            totalCount: appointments.total,
+            ...counts,
+            documents: appointments.documents
+        }
+
+        return parseStringify(data);
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+export const getIndividualAppointmentList = async (userId: string) => {
+    unstable_noStore();
+    try {
+        const appointments = await databases.listDocuments(
+            DATABASE_ID!,
+            APPOINTMENT_COLLECTION_ID!,
+            [Query.equal('userId', userId)],
+        );
+
+        const initialCounts = {
+            scheduledCount: 0,
+            pendingCount: 0,
+            cancelledCount: 0,
+            completeCount: 0,
+        }
+
+        const counts = (appointments.documents as Appointment[]).reduce((acc, appointment) => {
+            switch (appointment.status) {
+                case 'scheduled':
+                    acc.scheduledCount += 1;
+                    break;
+                case 'pending':
+                    acc.pendingCount += 1;
+                    break;
+                case 'cancelled':
+                    acc.cancelledCount += 1;
+                    break;
+                case 'completed':
+                    acc.completeCount += 1;
                     break;
             }
 
@@ -97,10 +148,9 @@ export const updateAppointment = async ({ appointmentId, userId, appointment, ty
           const doctor = Doctors.documents.find((doc:Doctor) => doc.$id === appointment.doctor)
 
         const smsMessage = `
-            Hi, it's CarePulse.
             ${type === 'schedule' 
-                ? `Your appointment has been scheduled for ${formatDateTime(appointment.schedule!).dateTime} with Dr. ${doctor.name}` :
-                `We regret to inform you that your appointment has been cancelled for the following reason: ${appointment.cancellationReason}`
+                && `Hi, it's CarePulse. Your appointment has been scheduled for ${formatDateTime(appointment.schedule!).dateTime} with Dr. ${doctor.name}` || type === 'cancel' &&
+                `Hi, it's CarePulse. We regret to inform you that your appointment has been cancelled for the following reason: ${appointment.cancellationReason}`
             }.
         `;
         await sendSMSNotification(userId, smsMessage);

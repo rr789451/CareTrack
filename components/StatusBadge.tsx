@@ -9,6 +9,7 @@ export const StatusBadge = ({ status }: { status: Status }) => {
         "bg-green-600": status === "scheduled",
         "bg-blue-600": status === "pending",
         "bg-red-600": status === "cancelled",
+        "bg-green-500": status === "completed"
       })}
     >
       <Image
@@ -23,6 +24,7 @@ export const StatusBadge = ({ status }: { status: Status }) => {
           "text-green-500": status === "scheduled",
           "text-blue-500": status === "pending",
           "text-red-500": status === "cancelled",
+          "text-green-400": status === "completed",
         })}
       >
         {status}

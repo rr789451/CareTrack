@@ -18,11 +18,13 @@ const AppointmentModal = ({
     patientId,
     userId,
     appointment,
+    disabled
 }: {
-    type: 'schedule' | 'cancel',
+    type: 'schedule' | 'cancel' | 'edit' | 'complete',
     patientId: string,
     userId: string,
     appointment?: Appointment,
+    disabled: boolean
 }) => {
 
   const [open, setOpen] = useState(false);
@@ -30,7 +32,7 @@ const AppointmentModal = ({
   return (
     <Dialog open={open} onOpenChange={setOpen}>
         <DialogTrigger asChild>
-            <Button variant='ghost' className={`capitalize ${type === 'schedule' && 'text-green-500' || type === 'cancel' && 'text-red-500'}`}>
+            <Button variant='ghost' disabled={disabled} className={`capitalize ${type === 'schedule' && 'text-green-500' || type === 'cancel' && 'text-red-500' || type === 'edit' && 'text-green-500'}`}>
                 {type}
             </Button>
         </DialogTrigger>
