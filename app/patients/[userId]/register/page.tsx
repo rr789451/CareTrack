@@ -1,13 +1,20 @@
 import RegisterForm from '@/components/forms/RegisterForm'
+import ProtectedPage from '@/components/ProtectedPage'
 import { getUser } from '@/lib/actions/patient.actions'
 import Image from 'next/image'
+import { notFound } from 'next/navigation'
 import React from 'react'
 
 const Register = async ({ params: {userId} } : SearchParamProps) => {
 
-  const user = await getUser(userId)
+  const user = await getUser(userId);
+
+  if (!user) {
+    notFound();
+  }
 
   return (
+    <ProtectedPage>
     <div className="flex h-screen max-h-screen">
       <section className="remove-scrollbar container">
         <div className="sub-container max-w-[860px] flex-1 flex-col py-10">
@@ -35,6 +42,7 @@ const Register = async ({ params: {userId} } : SearchParamProps) => {
         className="side-img max-w-[45%]"
       />
     </div>
+    </ProtectedPage>
   )
 }
 

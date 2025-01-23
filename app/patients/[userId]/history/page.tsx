@@ -8,6 +8,8 @@ import { LogoutButton } from '@/components/LogoutButton'
 import { Button } from '@/components/ui/button'
 import { PatientTable } from '@/components/table/PatientTable'
 import { getUser } from '@/lib/actions/patient.actions'
+import ProtectedPage from '@/components/ProtectedPage'
+import { notFound } from 'next/navigation'
 
 const History = async ({ params }: { params: { userId: string } }) => {
   const { userId } = params;
@@ -15,7 +17,12 @@ const History = async ({ params }: { params: { userId: string } }) => {
   const user = await getUser(userId);
   const doctors = await getRecentDoctorList();
 
+  if (!user) {
+    notFound();
+  }
+
   return (
+    <ProtectedPage>
     <div className='mx-auto flex max-w-7xl flex-col space-y-14'>
         <header className='admin-header'>
             <Link href="/" className='cursor-pointer'>
@@ -77,6 +84,7 @@ const History = async ({ params }: { params: { userId: string } }) => {
             <PatientTable appointments={appointments.documents} doctors={doctors.documents} />
         </main>
     </div>
+    </ProtectedPage>
   )
 }
 

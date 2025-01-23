@@ -19,6 +19,7 @@ import {
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { getPatient, verifyOtp } from '@/lib/actions/patient.actions';
+import Cookies from 'js-cookie'
   
 const OtpModal = ({ data }: { data: { phone: string; userId: string; email: string } }) => {
 
@@ -27,14 +28,22 @@ const OtpModal = ({ data }: { data: { phone: string; userId: string; email: stri
   const [open, setOpen] = useState(true);
   const [otp, setOtp] = useState('');
   const [error, setError] = useState('');
+  const [isLoggingIn, setIsLoggingIn] = useState(false);
 
   const validateOtp = async (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     e.preventDefault();
+    setIsLoggingIn(true);
 
     try {
         const otpData = await verifyOtp(data.email, otp, data.userId);
         if(otpData){
             const patient = await getPatient(data.userId)
+
+            Cookies.set('userSession', JSON.stringify({
+                userId: data.userId,
+                email: data.email
+            }), { expires: 3 });
+
             if(patient){
                 router.push(`/patients/${data.userId}/history`);
             } else {
@@ -43,7 +52,7 @@ const OtpModal = ({ data }: { data: { phone: string; userId: string; email: stri
         }
     } catch (error) {
         setError(String(error));
-        console.log(error);
+        setIsLoggingIn(false);
     }
     
   }
@@ -87,7 +96,20 @@ const OtpModal = ({ data }: { data: { phone: string; userId: string; email: stri
                     {error && <p className='shad-error text-14-regular mt-4 flex justify-center'>{error}</p>}
                 </div>
             <AlertDialogFooter>
-            <AlertDialogAction onClick={(e) => validateOtp(e)} className='shad-primary-btn w-full'>Continue</AlertDialogAction>
+            <AlertDialogAction 
+                        onClick={(e) => validateOtp(e)} 
+                        className={`shad-primary-btn w-full transition duration-300 ${isLoggingIn ? 'cursor-not-allowed opacity-70' : 'hover:bg-green-500'}`}
+                        disabled={isLoggingIn}
+                    >
+                        {isLoggingIn ? (
+                            <div className="flex justify-center items-center">
+                                <div className="w-5 h-5 border-4 border-white border-t-green-500 rounded-full animate-spin mr-2"></div>
+                                Logging in...
+                            </div>
+                        ) : (
+                            'Continue'
+                        )}
+                    </AlertDialogAction>
             </AlertDialogFooter>
         </AlertDialogContent>
     </AlertDialog>

@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-non-null-asserted-optional-chain */
+import ProtectedPage from '@/components/ProtectedPage';
 import { Button } from '@/components/ui/button';
 import { getAppointment } from '@/lib/actions/appointment.actions';
 import { getRecentDoctorList } from '@/lib/actions/doctor.actions';
@@ -15,6 +16,7 @@ const Success = async ({ params: { userId }, searchParams }: SearchParamProps) =
   const Doctors = await getRecentDoctorList();
   const doctor = Doctors.documents.find((doc:Doctor) => doc.$id === appointment.doctor.$id)
   return (
+    <ProtectedPage>
     <div className='flex h-screen max-h-screen px-[5%]'>
         <div className='success-img'>
             <Link href='/'>
@@ -74,6 +76,7 @@ const Success = async ({ params: { userId }, searchParams }: SearchParamProps) =
             <p className='copyright'>© 2024 CarePulse</p>
         </div>
     </div>
+    </ProtectedPage>
   )
 }
 
