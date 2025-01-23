@@ -44,26 +44,28 @@ const PasskeyModal = () => {
             setOpen(true);
         }
     }
-  }, [encryptedKey])
+  }, [encryptedKey, path, router])
 
   const validatePasskey = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     e.preventDefault();
     setIsLoggingIn(true);
 
-    if(passkey === process.env.NEXT_PUBLIC_ADMIN_PASSKEY) {
-        const encryptedKey = encryptKey(passkey);
-
-        localStorage.setItem('accessKey', encryptedKey);
-
-        setOpen(false);
-    } else {
-        setError('Invalid passkey. Please try again.');
-        setIsLoggingIn(false);
-    }
-  }
+    setTimeout(() => {
+        if (passkey === process.env.NEXT_PUBLIC_ADMIN_PASSKEY) {
+            const encryptedKey = encryptKey(passkey);
+            localStorage.setItem('accessKey', encryptedKey);
+            setOpen(false);
+            router.push('/admin');
+        } else {
+            setError('Invalid passkey. Please try again.');
+            setIsLoggingIn(false);
+        }
+    }, 2000);
+}
 
   const closeModal = () => {
     setOpen(false);
+    setIsLoggingIn(false);
     router.push('/');
   }
 

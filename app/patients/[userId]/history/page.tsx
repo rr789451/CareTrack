@@ -5,11 +5,11 @@ import Link from 'next/link'
 import React from 'react'
 import { getRecentDoctorList } from '@/lib/actions/doctor.actions'
 import { LogoutButton } from '@/components/LogoutButton'
-import { Button } from '@/components/ui/button'
 import { PatientTable } from '@/components/table/PatientTable'
 import { getUser } from '@/lib/actions/patient.actions'
 import ProtectedPage from '@/components/ProtectedPage'
 import { notFound } from 'next/navigation'
+import NewAppointmentButton from '@/components/NewAppointmentButton'
 
 const History = async ({ params }: { params: { userId: string } }) => {
   const { userId } = params;
@@ -34,7 +34,7 @@ const History = async ({ params }: { params: { userId: string } }) => {
                     className='h-8 w-fit'
                 />
             </Link>
-            <p className='text-16-semibold'>Patient Dashboard</p>
+            <p className='text-16-semibold cursor-default'>Patient Dashboard</p>
             <LogoutButton />
         </header>
         <main className='admin-main'>
@@ -42,11 +42,7 @@ const History = async ({ params }: { params: { userId: string } }) => {
                 <p className='text-dark-700'>Welcome ,</p>
                 <h1 className='header'>{user.name}👋</h1>
                 <p className='text-dark-700'>Time to manage appointments! Edit or Cancel them with a flick of your wand.</p>
-                <Link href={`/patients/${userId}/new-appointment`}>
-                    <Button className='bg-green-500 text-white max-w-[400px] py-4 px-12 mt-4 rounded-md hover:bg-green-500'>
-                        New Appointment
-                    </Button>
-                </Link>
+                <NewAppointmentButton userId={userId} />
             </section>
 
             <section className='admin-stat'>

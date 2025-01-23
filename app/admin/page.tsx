@@ -28,7 +28,7 @@ const Admin = async () => {
                     className='h-8 w-fit'
                 />
             </Link>
-            <p className='text-16-semibold'>Admin Dashboard</p>
+            <p className='text-16-semibold cursor-default'>Admin Dashboard</p>
             <AdminLogout />
         </header>
 

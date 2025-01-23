@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-non-null-asserted-optional-chain */
+import DashboardButton from '@/components/DashboardButton';
 import ProtectedPage from '@/components/ProtectedPage';
-import { Button } from '@/components/ui/button';
 import { getAppointment } from '@/lib/actions/appointment.actions';
 import { getRecentDoctorList } from '@/lib/actions/doctor.actions';
 import { formatDateTime } from '@/lib/utils';
@@ -67,11 +67,7 @@ const Success = async ({ params: { userId }, searchParams }: SearchParamProps) =
                 </div>
             </section>
 
-            <Button variant="outline" className='shad-primary-btn' asChild>
-                <Link href={`/patients/${userId}/history`}>
-                    Appointment Dashboard
-                </Link>
-            </Button>
+            <DashboardButton userId={userId} />
 
             <p className='copyright'>© 2024 CarePulse</p>
         </div>
