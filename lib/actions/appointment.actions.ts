@@ -143,7 +143,6 @@ export const updateAppointment = async ({ appointmentId, userId, appointment, ty
             throw new Error('Appointment not found');
         }
 
-        
           const Doctors = await getRecentDoctorList();
           const doctor = Doctors.documents.find((doc:Doctor) => doc.$id === appointment.doctor)
 
@@ -153,7 +152,9 @@ export const updateAppointment = async ({ appointmentId, userId, appointment, ty
                 `Hi, it's CarePulse. We regret to inform you that your appointment has been cancelled for the following reason: ${appointment.cancellationReason}`
             }.
         `;
-        await sendSMSNotification(userId, smsMessage);
+        if(type === 'schedule' || type === 'cancel'){
+            await sendSMSNotification(userId, smsMessage);
+        }
 
         revalidatePath('/admin');
         return parseStringify(updatedAppointment);

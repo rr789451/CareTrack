@@ -66,7 +66,7 @@ const AppointmentForm = ({
   
     fetchDoctors();
   }, []);
-
+console.log('Before submit');
   async function onSubmit(values: z.infer<typeof AppointmentFormValidation>) {
     setIsLoading(true);
     let status;
@@ -92,6 +92,7 @@ const AppointmentForm = ({
             status = 'pending';
             break;
       }
+      console.log('here')
 
     try {
         if(type === 'create' && patientId){
@@ -110,6 +111,29 @@ const AppointmentForm = ({
             if(appointment){
                 form.reset();
                 router.push(`/patients/${userId}/new-appointment/success?appointmentId=${appointment.$id}`)
+            }
+        } else if(type === 'edit'){
+            console.log('Edit')
+            const appointmentToEdit = {
+                userId,
+                appointmentId: appointment?.$id!,
+                appointment:{
+                    doctor: values.primaryPhysician,
+                    schedule: new Date(values?.schedule),
+                    status: status as Status,
+                    cancellationReason: values?.cancellationReason,
+                    completionReason: values?.completionReason,
+                },
+                type
+            }
+
+            const editededAppointment = await updateAppointment(appointmentToEdit);
+
+            if(editededAppointment) {
+                if (setOpen) {
+                    setOpen(false);
+                }
+                form.reset();
             }
         } else {
             const appointmentToUpdate = {
