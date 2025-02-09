@@ -7,11 +7,14 @@ import { StatusBadge } from "../StatusBadge"
 import { formatDateTime } from "@/lib/utils"
 import Image from "next/image"
 import AppointmentModal from "../AppointmentModal"
+import MapDialog from '../MapModal'
 
 interface PatientTableProps {
   appointments: Appointment[]
   doctors: Doctor[]
 }
+
+const locationCoordinates: [number, number] = [17.399367866378135, 78.47926342216678];
 
 const createColumns = (doctors: Doctor[]): ColumnDef<Appointment>[] => [
   {
@@ -83,6 +86,7 @@ const createColumns = (doctors: Doctor[]): ColumnDef<Appointment>[] => [
                     appointment={data}
                     disabled={data.status === 'pending' || data.status === 'scheduled' ? false : true}
                 />
+                <MapDialog coordinates={locationCoordinates} />
             </div>
         )
     },
