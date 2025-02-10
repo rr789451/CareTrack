@@ -54,7 +54,7 @@ const NotFoundPage = () => {
                 ) : (
                     <Button
                         onClick={handleRedirect}
-                        className="px-6 py-3 bg-green-500 text-white font-bold rounded-lg shadow-lg hover:bg-green-600 transition duration-300"
+                        className="px-6 py-3 bg-green-500 text-white font-bold rounded-lg shadow-lg hover:bg-green-500 transition duration-300"
                     >
                         {redirectPath === '/' ? 'Take Me to Login' : 'Go Back to My History'}
                     </Button>

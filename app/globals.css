@@ -384,6 +384,10 @@
   color: #1a1d21;
 }
 
+.swal2-timer-progress-bar {
+  background: #24AE7C;
+}
+
 @layer base {
   * {
     @apply border-border;

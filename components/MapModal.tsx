@@ -7,6 +7,7 @@ import dynamic from 'next/dynamic';
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
 import 'leaflet-routing-machine';
+import Swal from 'sweetalert2'
 
 interface MapDialogProps {
   coordinates: [number, number];
@@ -86,11 +87,25 @@ const MapComponent = ({ coordinates }: { coordinates: [number, number] }) => {
         },
         (error) => {
           console.error('Geolocation error:', error);
-          alert('Unable to retrieve your location.');
+          Swal.fire({
+            title: 'Error!',
+            text: 'Unable to retrieve your location.',
+            icon: 'error',
+            timerProgressBar: true,
+            timer: 3000,
+            showConfirmButton: false
+          });
         }
       );
     } else {
-      alert('Geolocation is not supported by your browser.');
+      Swal.fire({
+        title: 'Error!',
+        text: 'Geolocation is not supported by your browser.',
+        icon: 'error',
+        timerProgressBar: true,
+        timer: 3000,
+        showConfirmButton: false
+      });
     }
   };
 
@@ -103,19 +118,19 @@ const MapComponent = ({ coordinates }: { coordinates: [number, number] }) => {
   }, [mapInstanceRef.current]);
 
   return (
-    <div className="relative">
-      <div
-        ref={mapRef}
-        className="w-full h-[400px] rounded-md border border-gray-200"
-      />
-      <div className="absolute top-4 left-4 z-50">
+    <div>
+      <div className="relative bottom-2 left-0">
         <Button
-          className="bg-blue-500 text-white hover:bg-blue-600 shadow-md"
+          className="bg-green-500 text-white hover:bg-green-500"
           onClick={showDirections}
         >
           Directions
         </Button>
       </div>
+      <div
+        ref={mapRef}
+        className="w-full h-[400px] rounded-md border border-gray-200"
+      />
     </div>
   );
 };
